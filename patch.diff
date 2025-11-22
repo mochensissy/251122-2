@@ -1,0 +1,90 @@
+diff --git a/src/components/DocumentList.tsx b/src/components/DocumentList.tsx
+--- a/src/components/DocumentList.tsx
++++ b/src/components/DocumentList.tsx
+@@
+-import { supabase } from '../lib/supabase';
+-import { ragEngine } from '../lib/rag-engine';
++import { supabase } from '../lib/supabase';
++import { ragEngine } from '../lib/rag-engine';
++
++const TAG_VARIANTS = {
++  sequence: {
++    label: '序列',
++    chipClass: 'bg-indigo-50 text-indigo-700 border border-indigo-100 shadow-sm',
++    dotClass: 'bg-indigo-400',
++  },
++  level: {
++    label: '职级',
++    chipClass: 'bg-emerald-50 text-emerald-700 border border-emerald-100 shadow-sm',
++    dotClass: 'bg-emerald-400',
++  },
++  role: {
++    label: '角色',
++    chipClass: 'bg-amber-50 text-amber-700 border border-amber-100 shadow-sm',
++    dotClass: 'bg-amber-400',
++  },
++} as const;
+@@
+-        <div className="space-y-3">
+-          {documents.map(doc => (
+-            <div
++        <div className="space-y-3">
++          {documents.map((doc) => {
++            const tagChips: Array<{ key: keyof typeof TAG_VARIANTS; value: string }> = [
++              { key: 'sequence', value: doc.tag_sequence || '全员通用' },
++              { key: 'level', value: doc.tag_level || '全职级' },
++              { key: 'role', value: doc.tag_role_type || '全角色' },
++            ];
++
++            return (
++            <div
+               key={doc.id}
+               className={g-white border rounded-lg p-4 transition-all }
+             >
+@@
+-                  <div className="flex items-center gap-4 text-sm text-gray-500 mb-2">
+-                    <span>分块数: {doc.chunk_count || 0}</span>
+-                    <span>{formatDate(doc.created_at)}</span>
+-                  </div>
+-
+-                  <p className="text-sm text-gray-600 line-clamp-2">
+-                    {doc.content.substring(0, 150)}...
+-                  </p>
++                  <div className="flex items-center gap-4 text-sm text-gray-500 mb-2">
++                    <span>分块数: {doc.chunk_count || 0}</span>
++                    <span>{formatDate(doc.created_at)}</span>
++                  </div>
++
++                  <div className="flex flex-wrap items-center gap-2 text-xs mb-2">
++                    <span className="text-[11px] font-semibold uppercase tracking-[0.3em] text-gray-400">标签</span>
++                    {tagChips.map(({ key, value }) => {
++                      const variant = TAG_VARIANTS[key];
++                      return (
++                        <span
++                          key={key}
++                          className={inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold tracking-wide }
++                        >
++                          <span className={w-1.5 h-1.5 rounded-full } />
++                          <span className="text-[11px] text-slate-500">{variant.label}</span>
++                          <span className="text-xs font-bold text-slate-900/80">{value}</span>
++                        </span>
++                      );
++                    })}
++                  </div>
++
++                  <p className="text-sm text-gray-600 line-clamp-2">
++                    {doc.content.substring(0, 150)}...
++                  </p>
+                 </div>
+ 
+                 {!doc.is_chunked && (
+@@
+-              </div>
+-            </div>
+-          ))}
++              </div>
++            </div>
++            );
++          })}
+         </div>
+*** End Patch
