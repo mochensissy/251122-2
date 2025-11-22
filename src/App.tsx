@@ -73,7 +73,7 @@ function App() {
   const [rejectReason, setRejectReason] = useState('');
   const [expertPersona, setExpertPersona] = useState<UserProfile>({
     sequence: '人力资源',
-    level: 'P1-P3',
+    level: '经理层',
     role_type: '个人贡献者/BP',
   });
 
@@ -636,39 +636,41 @@ function App() {
             className="space-y-5"
           >
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">专业序列</label>
-              <select
-                name="sequence"
-                required
-                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-              >
-                <option value="人力资源">人力资源 (HR)</option>
-                <option value="财务">财务 (Finance)</option>
-                <option value="信息技术">信息技术 (IT)</option>
-                <option value="营销">营销 (Sales)</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">当前职级</label>
-              <select
-                name="level"
-                required
-                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-              >
-                <option value="P1-P3">P1 - P3 (基层岗位)</option>
-                <option value="P4-P5">P4 - P5 (经理/专家)</option>
-                <option value="P6-P7">P6 - P7 (高级管理者)</option>
-              </select>
-            </div>
-            <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">角色类型</label>
               <select
                 name="roleType"
                 required
                 className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
               >
-                <option value="非管理岗">个人贡献者 / BP</option>
-                <option value="管理岗">带团队负责人</option>
+                <option value="基层">基层</option>
+                <option value="经理层">经理层</option>
+                <option value="专业总监">专业总监</option>
+                <option value="干部">干部</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">专业序列</label>
+              <select
+                name="sequence"
+                required
+                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              >
+                <option value="市场（营销）">市场（营销）</option>
+                <option value="市场（销售）">市场（销售）</option>
+                <option value="供应链（生产）">供应链（生产）</option>
+                <option value="供应链（采购）">供应链（采购）</option>
+                <option value="供应链（营运）">供应链（营运）</option>
+                <option value="财务管理">财务管理</option>
+                <option value="人力资源">人力资源</option>
+                <option value="智能与数字化">智能与数字化</option>
+                <option value="战略管理">战略管理</option>
+                <option value="行政管理">行政管理</option>
+                <option value="研发">研发</option>
+                <option value="党群">党群</option>
+                <option value="纪检">纪检</option>
+                <option value="法律合规">法律合规</option>
+                <option value="EHS">EHS</option>
+                <option value="审计">审计</option>
               </select>
             </div>
             <div>
@@ -1025,30 +1027,44 @@ function App() {
                 <p className="text-sm text-slate-500 mb-4">
                   调整画像信息以模拟不同序列/职级的员工提问场景。
                 </p>
-                <div className="grid md:grid-cols-3 gap-4">
+                <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs font-medium text-slate-600 mb-1 block">专业序列</label>
-                    <input
-                      value={expertPersona.sequence}
-                      onChange={(e) => updateExpertPersona('sequence', e.target.value)}
-                      className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-xs font-medium text-slate-600 mb-1 block">当前职级</label>
-                    <input
+                    <label className="text-xs font-medium text-slate-600 mb-1 block">角色类型</label>
+                    <select
                       value={expertPersona.level}
                       onChange={(e) => updateExpertPersona('level', e.target.value)}
                       className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+                    >
+                      <option value="基层">基层</option>
+                      <option value="经理层">经理层</option>
+                      <option value="专业总监">专业总监</option>
+                      <option value="干部">干部</option>
+                    </select>
                   </div>
                   <div>
-                    <label className="text-xs font-medium text-slate-600 mb-1 block">角色类型</label>
-                    <input
-                      value={expertPersona.role_type}
-                      onChange={(e) => updateExpertPersona('role_type', e.target.value)}
+                    <label className="text-xs font-medium text-slate-600 mb-1 block">专业序列</label>
+                    <select
+                      value={expertPersona.sequence}
+                      onChange={(e) => updateExpertPersona('sequence', e.target.value)}
                       className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+                    >
+                      <option value="市场（营销）">市场（营销）</option>
+                      <option value="市场（销售）">市场（销售）</option>
+                      <option value="供应链（生产）">供应链（生产）</option>
+                      <option value="供应链（采购）">供应链（采购）</option>
+                      <option value="供应链（营运）">供应链（营运）</option>
+                      <option value="财务管理">财务管理</option>
+                      <option value="人力资源">人力资源</option>
+                      <option value="智能与数字化">智能与数字化</option>
+                      <option value="战略管理">战略管理</option>
+                      <option value="行政管理">行政管理</option>
+                      <option value="研发">研发</option>
+                      <option value="党群">党群</option>
+                      <option value="纪检">纪检</option>
+                      <option value="法律合规">法律合规</option>
+                      <option value="EHS">EHS</option>
+                      <option value="审计">审计</option>
+                    </select>
                   </div>
                 </div>
               </div>

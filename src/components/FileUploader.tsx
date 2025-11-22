@@ -24,9 +24,9 @@ import {
 import { fileParser } from '../lib/file-parser';
 import { supabase } from '../lib/supabase';
 
-const sequenceOptions = ['全员通用', '人力资源', '财务', '信息技术', '营销', '生产', '供应链'];
-const levelOptions = ['全职级', 'P1-P3', 'P4-P5', 'P6-P7'];
-const roleOptions = ['全角色', '管理岗', '非管理岗'];
+const sequenceOptions = ['市场（营销）', '市场（销售）', '供应链（生产）', '供应链（采购）', '供应链（营运）', '财务管理', '人力资源', '智能与数字化', '战略管理', '行政管理', '研发', '党群', '纪检', '法律合规', 'EHS', '审计'];
+const levelOptions = ['基层', '经理层', '专业总监', '干部'];
+const roleOptions = ['全角色', '个人贡献者/BP', '带团队负责人'];
 
 interface FileUploadItem {
   id: string;
@@ -205,23 +205,9 @@ export default function FileUploader({ onUploadComplete }: FileUploaderProps) {
         <p className="text-sm text-gray-500 mb-4">
           为即将上传的文档选择适用的序列 / 职级 / 角色标签，系统会基于这些标签进行角色化检索。
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="text-xs font-medium text-gray-600">专业序列</label>
-            <select
-              value={defaultSequence}
-              onChange={(e) => setDefaultSequence(e.target.value)}
-              className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              {sequenceOptions.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="text-xs font-medium text-gray-600">职级范围</label>
+            <label className="text-xs font-medium text-gray-600">角色类型</label>
             <select
               value={defaultLevel}
               onChange={(e) => setDefaultLevel(e.target.value)}
@@ -235,13 +221,13 @@ export default function FileUploader({ onUploadComplete }: FileUploaderProps) {
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-gray-600">角色类型</label>
+            <label className="text-xs font-medium text-gray-600">专业序列</label>
             <select
-              value={defaultRole}
-              onChange={(e) => setDefaultRole(e.target.value)}
+              value={defaultSequence}
+              onChange={(e) => setDefaultSequence(e.target.value)}
               className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              {roleOptions.map((option) => (
+              {sequenceOptions.map((option) => (
                 <option key={option} value={option}>
                   {option}
                 </option>
