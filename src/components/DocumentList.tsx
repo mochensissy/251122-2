@@ -13,20 +13,15 @@ import { supabase } from '../lib/supabase';
 import { ragEngine } from '../lib/rag-engine';
 
 const TAG_VARIANTS = {
-  sequence: {
-    label: '序列',
-    chipClass: 'bg-indigo-50 text-indigo-700 border border-indigo-100 shadow-sm',
-    dotClass: 'bg-indigo-400',
-  },
-  level: {
-    label: '职级',
-    chipClass: 'bg-emerald-50 text-emerald-700 border border-emerald-100 shadow-sm',
-    dotClass: 'bg-emerald-400',
-  },
   role: {
     label: '角色',
     chipClass: 'bg-amber-50 text-amber-700 border border-amber-100 shadow-sm',
     dotClass: 'bg-amber-400',
+  },
+  sequence: {
+    label: '序列',
+    chipClass: 'bg-indigo-50 text-indigo-700 border border-indigo-100 shadow-sm',
+    dotClass: 'bg-indigo-400',
   },
 } as const;
 
@@ -251,9 +246,8 @@ export default function DocumentList({ onUpdate }: DocumentListProps) {
         <div className="space-y-3">
           {documents.map((doc) => {
             const tagChips: Array<{ key: keyof typeof TAG_VARIANTS; value: string }> = [
-              { key: 'sequence', value: doc.tag_sequence || '全员通用' },
-              { key: 'level', value: doc.tag_level || '全职级' },
               { key: 'role', value: doc.tag_role_type || '全角色' },
+              { key: 'sequence', value: doc.tag_sequence || '全员通用' },
             ];
 
             const isSelected = selectedIds.has(doc.id);

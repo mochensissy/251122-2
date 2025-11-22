@@ -1,41 +1,44 @@
 -- 更新人才画像测评选项
 -- 更新测试数据以反映新的选项结构
+-- 新结构：角色类型（基层、经理层、专业总监、干部）+ 专业序列（16个选项）
 
 -- 删除现有的测试数据
 DELETE FROM knowledge_docs WHERE id IN (
-  SELECT id FROM knowledge_docs WHERE tag_sequence IN ('人力资源', '财务', '信息技术', '营销', '生产', '供应链')
+  SELECT id FROM knowledge_docs 
+  WHERE tag_sequence IN ('人力资源', '财务', '信息技术', '营销', '生产', '供应链', '财务管理', '智能与数字化', '市场（营销）', '市场（销售）')
   OR tag_level IN ('P1-P3', 'P4-P5', 'P6-P7', '全职级')
+  OR tag_role_type IN ('管理岗', '非管理岗', '个人贡献者/BP', '带团队负责人')
 );
 
 -- 插入新的测试数据（使用更新后的选项）
+-- 字段顺序：title, content, tag_role_type, tag_sequence, tag_level, doc_type
 
 -- 1. 人力资源序列相关政策
-INSERT INTO knowledge_docs (title, content, tag_sequence, tag_level, tag_role_type, doc_type) VALUES
+INSERT INTO knowledge_docs (title, content, tag_role_type, tag_sequence, tag_level, doc_type) VALUES
 ('人力资源晋升管理办法', '**人力资源序列晋升管理办法**
 
-**基层员工晋升标准（P1-P3）**
+**基层员工晋升标准**
 - 在当前岗位工作满2年
 - 年度绩效B+级及以上
 - 完成岗位技能培训并通过考核
 - 通过专业能力测评
 
-**经理层晋升标准（P4-P5）**
+**经理层晋升标准**
 - 在当前级别工作满2年
 - 连续2年绩效A级或以上
 - 具备团队管理经验
 - 完成管理能力发展项目
 
-**专业总监晋升标准（P6-P7）**
+**专业总监晋升标准**
 - 在经理层工作满3年
 - 连续3年绩效A级
 - 主导过跨部门重大项目
 - 通过高层管理能力评估
 
 **干部晋升标准**
-- 在总监层工作满3年
-- 具备战略思维和全局视野
-- 领导过重要变革项目
-- 通过组织发展能力评估
+- 在专业总监岗位工作满3年
+- 具有战略规划和组织变革能力
+- 通过集团干部评估中心考核
 
 **申请流程**:
 1. 每年3月、9月开放晋升通道
@@ -43,7 +46,7 @@ INSERT INTO knowledge_docs (title, content, tag_sequence, tag_level, tag_role_ty
 3. 提交晋升答辩材料
 4. 通过专业委员会评审
 
-参考文件: 《HR-2024-028号 人力资源序列晋升管理办法》', '人力资源', '全职级', '全角色', 'policy'),
+参考文件: 《HR-2024-028号 人力资源序列晋升管理办法》', '全角色', '人力资源', '', 'policy'),
 
 ('HRBP资格认证项目', '**HRBP资格认证项目**
 
@@ -69,35 +72,34 @@ INSERT INTO knowledge_docs (title, content, tag_sequence, tag_level, tag_role_ty
 
 **申请时间**: 每年6月开放报名,9月开班
 
-参考文件: 《HR-2023-067号 HRBP培养计划》', '人力资源', '经理层', '全角色', 'policy');
+参考文件: 《HR-2024-035号 HRBP资格认证管理办法》', '经理层', '人力资源', '', 'policy');
 
 -- 2. 财务管理序列相关政策
-INSERT INTO knowledge_docs (title, content, tag_sequence, tag_level, tag_role_type, doc_type) VALUES
+INSERT INTO knowledge_docs (title, content, tag_role_type, tag_sequence, tag_level, doc_type) VALUES
 ('财务管理晋升标准', '**财务管理序列晋升标准**
 
-**基层财务人员（P1-P3）**
+**基层财务人员**
 - 入职满1年
-- 取得相应职业资格认证
+- 取得初级会计职称
 - 年度绩效B级及以上
-- 熟练掌握财务系统和流程
+- 熟练掌握财务系统操作
 
-**经理层财务人员（P4-P5）**
+**经理层财务人员**
 - 担任基层满2年
-- 取得中级职业资格认证
+- 取得中级会计职称(必须)
 - 连续2年绩效A级
-- 具备团队管理能力
+- 具备团队管理经验
 
-**专业总监级财务人员（P6-P7）**
+**专业总监财务人员**
 - 在经理层工作满2年
-- 具备高级职业资格认证
+- 取得高级会计职称
 - 连续3年绩效A级
 - 主导过重要财务项目
 
-**干部级财务人员**
-- 在总监层工作满3年
-- 具备战略财务管理能力
-- 主导公司重要财务决策
-- 通过高级管理能力评估
+**财务干部**
+- 在专业总监工作满3年
+- 具备财务战略规划能力
+- 通过高级财务管理评估
 
 **申请流程**:
 1. 每年3月、9月开放晋升通道
@@ -105,25 +107,25 @@ INSERT INTO knowledge_docs (title, content, tag_sequence, tag_level, tag_role_ty
 3. 提交专业能力评估
 4. 通过专业委员会评审
 
-参考文件: 《FIN-2024-015号 财务管理序列晋升管理办法》', '财务管理', '全职级', '全角色', 'policy');
+参考文件: 《FIN-2024-015号 财务管理序列晋升管理办法》', '全角色', '财务管理', '', 'policy');
 
--- 3. 市场序列相关政策
-INSERT INTO knowledge_docs (title, content, tag_sequence, tag_level, tag_role_type, doc_type) VALUES
-('市场序列营销专业晋升标准', '**市场序列营销专业晋升标准**
+-- 3. 市场序列（营销）相关政策
+INSERT INTO knowledge_docs (title, content, tag_role_type, tag_sequence, tag_level, doc_type) VALUES
+('市场营销专业晋升标准', '**市场序列营销专业晋升标准**
 
-**基层营销人员（营销方向）**
+**基层营销人员**
 - 在营销岗位工作满2年
 - 具备市场营销理论基础
 - 年度绩效B+级及以上
 - 完成品牌营销专业培训
 
-**经理层营销人员（营销方向）**
+**经理层营销人员**
 - 担任基层营销满2年
 - 主导过至少2个品牌项目
 - 连续2年绩效A级
 - 具备团队协作能力
 
-**专业总监营销人员（营销方向）**
+**专业总监营销人员**
 - 在经理层工作满2年
 - 主导过公司级营销项目
 - 连续3年绩效A级
@@ -135,23 +137,25 @@ INSERT INTO knowledge_docs (title, content, tag_sequence, tag_level, tag_role_ty
 - 具备市场洞察和创新能力
 - 通过高级领导力评估
 
-参考文件: 《MKT-2024-022号 市场序列营销专业晋升管理办法》', '市场（营销）', '全职级', '全角色', 'policy'),
+参考文件: 《MKT-2024-022号 市场序列营销专业晋升管理办法》', '全角色', '市场（营销）', '', 'policy');
 
-('市场序列销售专业晋升标准', '**市场序列销售专业晋升标准**
+-- 4. 市场序列（销售）相关政策
+INSERT INTO knowledge_docs (title, content, tag_role_type, tag_sequence, tag_level, doc_type) VALUES
+('市场销售专业晋升标准', '**市场序列销售专业晋升标准**
 
-**基层销售人员（销售方向）**
+**基层销售人员**
 - 在销售岗位工作满2年
 - 达成年度销售目标90%以上
 - 年度绩效B级及以上
 - 完成销售技能培训
 
-**经理层销售人员（销售方向）**
+**经理层销售人员**
 - 担任基层销售满2年
 - 团队销售业绩连续增长
 - 连续2年绩效A级
 - 具备团队管理能力
 
-**专业总监销售人员（销售方向）**
+**专业总监销售人员**
 - 在经理层工作满2年
 - 负责重要客户群体管理
 - 连续3年绩效A级
@@ -163,10 +167,40 @@ INSERT INTO knowledge_docs (title, content, tag_sequence, tag_level, tag_role_ty
 - 具备销售战略规划能力
 - 通过高级销售管理评估
 
-参考文件: 《MKT-2024-023号 市场序列销售专业晋升管理办法》', '市场（销售）', '全职级', '全角色', 'policy');
+参考文件: 《MKT-2024-023号 市场序列销售专业晋升管理办法》', '全角色', '市场（销售）', '', 'policy');
 
--- 4. 智能与数字化序列
-INSERT INTO knowledge_docs (title, content, tag_sequence, tag_level, tag_role_type, doc_type) VALUES
+-- 5. 供应链（生产）序列
+INSERT INTO knowledge_docs (title, content, tag_role_type, tag_sequence, tag_level, doc_type) VALUES
+('供应链生产专业晋升标准', '**供应链序列生产专业晋升标准**
+
+**基层生产人员**
+- 在生产岗位工作满2年
+- 掌握生产工艺流程
+- 年度绩效B+级及以上
+- 完成生产管理专业培训
+
+**经理层生产人员**
+- 担任基层生产满2年
+- 主导过生产效率提升项目
+- 连续2年绩效A级
+- 具备生产团队管理能力
+
+**专业总监生产人员**
+- 在经理层工作满2年
+- 主导过公司级生产改进项目
+- 连续3年绩效A级
+- 具备生产战略规划能力
+
+**生产干部**
+- 在总监层工作满3年
+- 负责公司生产战略制定
+- 具备精益生产管理能力
+- 通过高级生产管理评估
+
+参考文件: 《SCM-2024-015号 供应链生产序列晋升管理办法》', '全角色', '供应链（生产）', '', 'policy');
+
+-- 6. 智能与数字化序列
+INSERT INTO knowledge_docs (title, content, tag_role_type, tag_sequence, tag_level, doc_type) VALUES
 ('智能与数字化晋升标准', '**智能与数字化序列晋升标准**
 
 **基层数字化人员**
@@ -199,36 +233,10 @@ INSERT INTO knowledge_docs (title, content, tag_sequence, tag_level, tag_role_ty
 - 参与行业技术交流
 - 完成创新项目实践
 
-参考文件: 《IT-2024-018号 智能与数字化序列晋升管理办法》', '智能与数字化', '全职级', '全角色', 'policy');
+参考文件: 《IT-2024-018号 智能与数字化序列晋升管理办法》', '全角色', '智能与数字化', '', 'policy');
 
--- 5. 通用管理政策（适用于所有序列）
-INSERT INTO knowledge_docs (title, content, tag_sequence, tag_level, tag_role_type, doc_type) VALUES
-('跨序列人才发展政策', '**跨序列人才发展政策**
-
-**支持员工在不同序列间的发展**:
-- 鼓励员工探索不同职业发展路径
-- 提供跨序列转岗机会
-- 支持内部人才流动
-
-**申请条件**:
-- 在当前序列工作满2年
-- 符合目标序列的基本要求
-- 通过转岗评估
-- 获得目标序列领导的认可
-
-**转岗流程**:
-1. 员工自主申请或组织推荐
-2. 目标序列面试评估
-3. 转岗培训与适应期
-4. 正式转岗并建立新发展计划
-
-**注意事项**:
-- 转岗后从目标序列的基层开始
-- 转岗记录纳入个人发展档案
-- 支持在新的序列继续发展
-
-参考文件: 《HR-2024-035号 跨序列人才发展管理办法》', '人力资源', '全职级', '全角色', 'policy'),
-
+-- 7. EHS序列
+INSERT INTO knowledge_docs (title, content, tag_role_type, tag_sequence, tag_level, doc_type) VALUES
 ('EHS管理晋升标准', '**EHS（环境健康安全）管理晋升标准**
 
 **基层EHS人员**
@@ -255,4 +263,32 @@ INSERT INTO knowledge_docs (title, content, tag_sequence, tag_level, tag_role_ty
 - 具备EHS风险管控能力
 - 通过高级EHS管理评估
 
-参考文件: 《EHS-2024-012号 EHS管理序列晋升管理办法》', 'EHS', '全职级', '全角色', 'policy');
+参考文件: 《EHS-2024-012号 EHS管理序列晋升管理办法》', '全角色', 'EHS', '', 'policy');
+
+-- 8. 通用管理政策（适用于所有序列和角色）
+INSERT INTO knowledge_docs (title, content, tag_role_type, tag_sequence, tag_level, doc_type) VALUES
+('跨序列人才发展政策', '**跨序列人才发展政策**
+
+**支持员工在不同序列间的发展**:
+- 鼓励员工探索不同职业发展路径
+- 提供跨序列转岗机会
+- 支持内部人才流动
+
+**申请条件**:
+- 在当前序列工作满2年
+- 符合目标序列的基本要求
+- 通过转岗评估
+- 获得目标序列领导的认可
+
+**转岗流程**:
+1. 员工自主申请或组织推荐
+2. 目标序列面试评估
+3. 转岗培训与适应期
+4. 正式转岗并建立新发展计划
+
+**注意事项**:
+- 转岗后从目标序列的基层开始
+- 转岗记录纳入个人发展档案
+- 支持在新的序列继续发展
+
+参考文件: 《HR-2024-035号 跨序列人才发展管理办法》', '全角色', '全员通用', '', 'policy');

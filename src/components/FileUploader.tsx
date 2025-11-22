@@ -24,9 +24,8 @@ import {
 import { fileParser } from '../lib/file-parser';
 import { supabase } from '../lib/supabase';
 
-const sequenceOptions = ['市场（营销）', '市场（销售）', '供应链（生产）', '供应链（采购）', '供应链（营运）', '财务管理', '人力资源', '智能与数字化', '战略管理', '行政管理', '研发', '党群', '纪检', '法律合规', 'EHS', '审计'];
-const levelOptions = ['基层', '经理层', '专业总监', '干部'];
-const roleOptions = ['全角色', '个人贡献者/BP', '带团队负责人'];
+const roleOptions = ['全角色', '基层', '经理层', '专业总监', '干部'];
+const sequenceOptions = ['全员通用', '市场（营销）', '市场（销售）', '供应链（生产）', '供应链（采购）', '供应链（营运）', '财务管理', '人力资源', '智能与数字化', '战略管理', '行政管理', '研发', '党群', '纪检', '法律合规', 'EHS', '审计'];
 
 interface FileUploadItem {
   id: string;
@@ -46,9 +45,8 @@ export default function FileUploader({ onUploadComplete }: FileUploaderProps) {
   const [uploadItems, setUploadItems] = useState<FileUploadItem[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [defaultSequence, setDefaultSequence] = useState('全员通用');
-  const [defaultLevel, setDefaultLevel] = useState('全职级');
   const [defaultRole, setDefaultRole] = useState('全角色');
+  const [defaultSequence, setDefaultSequence] = useState('全员通用');
 
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -110,9 +108,9 @@ export default function FileUploader({ onUploadComplete }: FileUploaderProps) {
           .insert({
             title: parsed.fileName,
             content: parsed.content,
-            tag_sequence: defaultSequence,
-            tag_level: defaultLevel,
             tag_role_type: defaultRole,
+            tag_sequence: defaultSequence,
+            tag_level: '',  // 不再使用职级字段
             is_chunked: false,
           })
           .select()
@@ -203,17 +201,17 @@ export default function FileUploader({ onUploadComplete }: FileUploaderProps) {
       <div className="bg-white border border-gray-200 rounded-lg p-4">
         <h4 className="font-semibold text-gray-900 mb-3">上传标签</h4>
         <p className="text-sm text-gray-500 mb-4">
-          为即将上传的文档选择适用的序列 / 职级 / 角色标签，系统会基于这些标签进行角色化检索。
+          为即将上传的文档选择适用的角色 / 序列标签，系统会基于这些标签进行角色化检索。
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="text-xs font-medium text-gray-600">角色类型</label>
             <select
-              value={defaultLevel}
-              onChange={(e) => setDefaultLevel(e.target.value)}
+              value={defaultRole}
+              onChange={(e) => setDefaultRole(e.target.value)}
               className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              {levelOptions.map((option) => (
+              {roleOptions.map((option) => (
                 <option key={option} value={option}>
                   {option}
                 </option>

@@ -182,7 +182,7 @@ async function searchKnowledgeFallback(
   const allDocs = [...universalDocs, ...specificDocs];
   const scoredDocs = allDocs.map((doc) => ({
     doc,
-    score: calculateRelevanceScore(queryLower, doc),
+    score: calculateRelevanceScore(queryLower, doc) + calculateTagMatchScore(doc, profile),
   }));
 
   return scoredDocs
@@ -274,6 +274,36 @@ function calculateRelevanceScore(query: string, doc: KnowledgeDoc): number {
         score += 2;
       }
     }
+  }
+
+  return score;
+}
+
+/**
+ * 计算标签匹配权重
+ */
+function calculateTagMatchScore(doc: KnowledgeDoc, profile: UserProfile): number {
+  let score = 0;
+
+  // 序列匹配权重（最高权重，因为员工最关心自己的序列政策）
+  if (doc.tag_sequence === profile.sequence) {
+    score += 50; // 专属序列完全匹配
+  } else if (doc.tag_sequence === '全员通用') {
+    score += 20; // 通用政策
+  }
+
+  // 职级匹配权重
+  if (doc.tag_level === profile.level) {
+    score += 30; // 专属职级完全匹配
+  } else if (doc.tag_level === '全职级') {
+    score += 15; // 全员适用
+  }
+
+  // 角色类型匹配权重
+  if (doc.tag_role_type === profile.role_type) {
+    score += 20; // 专属角色匹配
+  } else if (doc.tag_role_type === '全角色') {
+    score += 10; // 全员适用
   }
 
   return score;

@@ -72,9 +72,9 @@ function App() {
   const [expertAnswerDraft, setExpertAnswerDraft] = useState('');
   const [rejectReason, setRejectReason] = useState('');
   const [expertPersona, setExpertPersona] = useState<UserProfile>({
+    role_type: '基层',
     sequence: '人力资源',
-    level: '经理层',
-    role_type: '个人贡献者/BP',
+    level: '',
   });
 
   const [toast, setToast] = useState<{
@@ -242,7 +242,7 @@ function App() {
     const welcomeMsg: Message = {
       id: 'welcome',
       role: 'ai',
-      content: `您好！我是您的职业发展智能助手。\n\n我已经记录您的身份信息：\n- **${newProfile.sequence}序列**\n- 职级 **${newProfile.level}** (${newProfile.role_type})\n\n请问有什么关于晋升、绩效或发展的政策问题可以帮您？`,
+      content: `您好！我是您的职业发展智能助手。\n\n我已经记录您的身份信息：\n- **${newProfile.role_type}**\n- **${newProfile.sequence}序列**\n\n请问有什么关于晋升、绩效或发展的政策问题可以帮您？`,
       timestamp: Date.now(),
     };
 
@@ -627,9 +627,9 @@ function App() {
               const fd = new FormData(e.currentTarget);
               const contactEmail = (fd.get('contactEmail') as string)?.trim();
               handleOnboarding({
-                sequence: fd.get('sequence') as string,
-                level: fd.get('level') as string,
                 role_type: fd.get('roleType') as string,
+                sequence: fd.get('sequence') as string,
+                level: '',  // 不再使用职级字段
                 contact_email: contactEmail ? contactEmail : undefined,
               });
             }}
@@ -712,11 +712,11 @@ function App() {
             <div>
               <h1 className="font-bold text-slate-800">职业发展智能助手</h1>
               <div className="flex items-center gap-2 text-xs text-slate-500">
+                <span className="bg-amber-50 text-amber-700 px-2 py-0.5 rounded border border-amber-100">
+                  {profile.role_type}
+                </span>
                 <span className="bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded border border-indigo-100">
                   {profile.sequence}
-                </span>
-                <span className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded border border-blue-100">
-                  {profile.level}
                 </span>
               </div>
             </div>
@@ -934,8 +934,8 @@ function App() {
                           <div className="text-right">
                             <div className="text-xs text-slate-400 mb-1">提问者画像</div>
                             <div className="text-sm font-medium text-slate-700 flex items-center gap-2 justify-end">
-                              <span className="bg-slate-100 px-2 py-0.5 rounded">{task.asker_profile.sequence}</span>
-                              <span className="bg-slate-100 px-2 py-0.5 rounded">{task.asker_profile.level}</span>
+                              <span className="bg-amber-100 px-2 py-0.5 rounded">{task.asker_profile.role_type}</span>
+                              <span className="bg-indigo-100 px-2 py-0.5 rounded">{task.asker_profile.sequence}</span>
                             </div>
                           </div>
                         </div>
@@ -1025,14 +1025,14 @@ function App() {
               <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
                 <h2 className="text-lg font-semibold text-slate-800 mb-2">模拟员工画像</h2>
                 <p className="text-sm text-slate-500 mb-4">
-                  调整画像信息以模拟不同序列/职级的员工提问场景。
+                  调整画像信息以模拟不同角色/序列的员工提问场景。
                 </p>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <label className="text-xs font-medium text-slate-600 mb-1 block">角色类型</label>
                     <select
-                      value={expertPersona.level}
-                      onChange={(e) => updateExpertPersona('level', e.target.value)}
+                      value={expertPersona.role_type}
+                      onChange={(e) => updateExpertPersona('role_type', e.target.value)}
                       className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="基层">基层</option>
@@ -1224,11 +1224,11 @@ function App() {
                     <h3 className="text-lg font-bold text-slate-900 mb-2">{task.question}</h3>
                     <div className="flex items-center gap-2 text-xs text-slate-400">
                       <span>来源画像:</span>
-                      <span className="bg-slate-100 px-1.5 py-0.5 rounded text-slate-600">
-                        {task.asker_profile.sequence}
+                      <span className="bg-amber-100 px-1.5 py-0.5 rounded text-amber-700">
+                        {task.asker_profile.role_type}
                       </span>
-                      <span className="bg-slate-100 px-1.5 py-0.5 rounded text-slate-600">
-                        {task.asker_profile.level}
+                      <span className="bg-indigo-100 px-1.5 py-0.5 rounded text-indigo-700">
+                        {task.asker_profile.sequence}
                       </span>
                     </div>
                   </div>
